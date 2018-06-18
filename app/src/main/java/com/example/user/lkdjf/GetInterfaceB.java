@@ -5,6 +5,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface GetInterfaceB {
-    @GET("/v1/book/{symbol}")
+    @GET("/v1/pubticker/{symbol}")
     Call<Bitfinex> getData(@Path("symbol") String symbol);
 }

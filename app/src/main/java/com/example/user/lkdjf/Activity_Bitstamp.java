@@ -47,6 +47,14 @@ public class Activity_Bitstamp extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+        if(gow==null) {
+            gow.execute();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
@@ -141,6 +149,14 @@ public class Activity_Bitstamp extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response<Bitstamp> bitstampResponse) {
             super.onPostExecute(bitstampResponse);
+        }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if(gow!=null){
+            gow.cancel(true);
         }
     }
 

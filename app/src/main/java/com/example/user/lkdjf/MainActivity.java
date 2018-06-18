@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intentB = new Intent(this, Activity_Bitfinex.class);
             startActivity(intentB);
         }
+        if (view.getId() == R.id.cex) {
+            Intent intentC = new Intent(this, Activity_CEX.class);
+            startActivity(intentC);
+        }
     }
 }
 

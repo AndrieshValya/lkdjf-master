@@ -26,32 +26,25 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Activity_Bitfinex extends AppCompatActivity {
+public class Activity_CEX extends AppCompatActivity {
 
-    public GetInterfaceB getInterface;
+    public GetInterfaceC getInterface;
     public Retrofit retrofit;
-    public Bitfinex data;
+    public CEX data;
     public float timeIndex=0;
-    public String symbol="btcusd";
-    Response<Bitfinex> res;
-    public ArrayList<Bitfinex> bidList = new ArrayList<>();
-    BitfinexAPI gow = new BitfinexAPI();
+    public String symbol1="BTC";
+    public String symbol2="USD";
+    Response<CEX> res;
+    public ArrayList<CEX> bidList = new ArrayList<>();
+    public CEXAPI gow = new CEXAPI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bitfinex);
-        retrofit = new Retrofit.Builder().baseUrl("https://api.bitfinex.com").addConverterFactory(GsonConverterFactory.create()).build();
-        getInterface = retrofit.create(GetInterfaceB.class);
-
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        if(gow==null) {
-            gow.execute();
-        }
+        setContentView(R.layout.cex);
+        retrofit = new Retrofit.Builder().baseUrl("https://cex.io").addConverterFactory(GsonConverterFactory.create()).build();
+        getInterface = retrofit.create(GetInterfaceC.class);
+        gow.execute();
     }
 
     @Override
@@ -64,15 +57,17 @@ public class Activity_Bitfinex extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.bchusd:
-                symbol = "bchusd";
+                symbol1 = "BCH";
+                symbol2 = "USD";
                 timeIndex = 0;
                 TextView v=findViewById(R.id.text);
-                v.setText("btceur");
+                v.setText("bchusd");
                 bidList.clear();
 
                 break;
             case R.id.btcusd:
-                symbol = "btcusd";
+                symbol1 = "BTC";
+                symbol2 = "USD";
                 timeIndex = 0;
                 TextView v1=findViewById(R.id.text);
                 v1.setText("btcusd");
@@ -82,14 +77,14 @@ public class Activity_Bitfinex extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class BitfinexAPI extends AsyncTask<Void, Response<Bitfinex>, Response<Bitfinex>> {
+    class CEXAPI extends AsyncTask<Void, Response<CEX>, Response<CEX>> {
 
         @Override
-        protected Response<Bitfinex> doInBackground(Void... voids) {
+        protected Response<CEX> doInBackground(Void... voids) {
             res = null;
             while (!isCancelled()) {
                 try {
-                    Call<Bitfinex> responseCall = getInterface.getData(symbol);
+                    Call<CEX> responseCall = getInterface.getData(symbol1, symbol2);
                     res = responseCall.execute();
 
                 } catch (IOException e) { }
@@ -106,18 +101,18 @@ public class Activity_Bitfinex extends AppCompatActivity {
         }
 
         @Override
-        protected void onProgressUpdate(Response<Bitfinex>... bitfinexResponse) {
-            super.onProgressUpdate(bitfinexResponse);
-            data = bitfinexResponse[0].body();
+        protected void onProgressUpdate(Response<CEX>... CEXResponse) {
+            super.onProgressUpdate(CEXResponse);
+            data = CEXResponse[0].body();
             bidList.add(data);
 
             List<Entry> bidEntries = new ArrayList<>();
             List<Entry> askEntries = new ArrayList<>();
             List<Entry> lastEntries = new ArrayList<>();
-            for (Bitfinex i : bidList) {
+            for (CEX i : bidList) {
                 Float bid = i.getBid();
                 Float ask = i.getAsk();
-                Float last = i.getLastPrice();
+                Float last = i.getLast();
                 Float timestamp = i.getTimestamp();
 
                 lastEntries.add(new Entry(timestamp, last));
@@ -147,18 +142,9 @@ public class Activity_Bitfinex extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Response<Bitfinex> bitfinexResponse) {
-            super.onPostExecute(bitfinexResponse);
-        }
-
-    }
-    @Override
-    protected void onStop(){
-        super.onStop();
-        if(gow!=null){
-            gow.cancel(true);
+        protected void onPostExecute(Response<CEX> CEXResponse) {
+            super.onPostExecute(CEXResponse);
         }
     }
-
 
 }

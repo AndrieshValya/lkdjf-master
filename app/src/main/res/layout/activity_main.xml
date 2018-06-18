@@ -23,8 +23,9 @@
         android:text="bitfinex" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/cex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="CEX"
+        android:onClick="onClick"/>
 </LinearLayout>

@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".Activity_Bitstamp"></activity>
         <activity android:name=".Activity_Bitfinex"></activity>
+        <activity android:name=".Activity_CEX"></activity>
     </application>
 
 </manifest>
